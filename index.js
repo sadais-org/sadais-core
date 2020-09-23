@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { mergeDeep } from '@/piui/tools/lang'
-import defaultConsts from './consts'
+import { getConsts, setConsts } from './consts'
 
 import filters from './filters'
 Object.keys(filters).forEach(filterName => {
@@ -10,7 +10,8 @@ Object.keys(filters).forEach(filterName => {
 const logStyle = 'color:#ff6a00;font-size:20px;font-weight:500;'
 
 const install = (Vue, consts = {}) => {
-  const mergeConsts = mergeDeep(defaultConsts, consts)
+  const mergeConsts = mergeDeep(getConsts(), consts)
+  setConsts(mergeConsts)
   Vue.prototype.$consts = mergeConsts
   Vue.prototype.$filters = filters
 
