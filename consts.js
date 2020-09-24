@@ -4,7 +4,7 @@ let CONSTS = {
   NAME: '', // 应用名称
   SYSTEM: '', // 系统
   VERSION: '1.0', // 版本号
-  API_BASE_URL: '', // 接口baseURL
+  API_BASE_URL: 'http://192.168.0.148:8000/', // 接口baseURL
   STATIC_BASE_URL, // 静态资源baseURL
   STATIC_IMG_URL: STATIC_BASE_URL + '/demo/project/static/img/', // 静态资源文件路径
   get(name) {
@@ -14,8 +14,10 @@ let CONSTS = {
 
 /**
  * 获取常量
+ * @param {String} field 字段
  */
-export const getConsts = () => {
+export const getConsts = field => {
+  if (field) return CONSTS[field]
   return CONSTS
 }
 
