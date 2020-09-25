@@ -1,10 +1,8 @@
 import Request from 'luch-request'
 import { getConsts } from '../consts'
 
-const options = {
-  baseURL: getConsts('API_BASE_URL')
-}
+const requestInstance = new Request()
 
-const requestInstance = new Request(options)
+requestInstance.config.baseURL = getConsts('API_BASE_URL')
 
 export default requestInstance

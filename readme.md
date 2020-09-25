@@ -1,7 +1,17 @@
 使用本库依赖列表
 
+## 安装
+
+项目src目录下必须定义consts文件或者consts/index
+
+```js
+// 引入核心业务
+import sadaisCore from '@/sadais-core'
+Vue.use(sadaisCore)
+```
+
 1. piui
-2. mescroll
+
 
 ## uni.scss建议和sadais-core一直的consts配置
 
