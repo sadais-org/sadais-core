@@ -2,7 +2,7 @@
 
 ## 安装
 
-项目src目录下必须定义consts文件或者consts/index
+项目src目录定义consts.js文件进行变量覆盖
 
 ```js
 // 引入核心业务

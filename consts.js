@@ -1,5 +1,4 @@
 import { mergeDeep } from '@/piui/tools/lang'
-import consts from '@/consts'
 
 const STATIC_BASE_URL = 'http://m.sadais.com'
 
@@ -15,8 +14,13 @@ let CONSTS = {
   }
 }
 
-const mergeConsts = mergeDeep(CONSTS, consts)
-CONSTS = mergeConsts
+// 判断src目录下有没有定义consts.js文件，有则覆盖
+const context = require.context('@/', false, /consts.js/)
+if (context.keys().length === 1) {
+  const consts = require('@/consts')
+  const mergeConsts = mergeDeep(CONSTS, consts.default || consts)
+  CONSTS = mergeConsts
+}
 
 /**
  * 获取常量
