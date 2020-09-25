@@ -1,7 +1,3 @@
-
-
-
-
 const USER_INFO = 'USER_INFO' // 用户个人信息
 const USER_ACCOUNT = 'USER_ACCOUNT' // 用户账号
 const LOGIN_INFO = 'LOGIN_INFO' // 登录信息
@@ -143,5 +139,3 @@ export const logout = url => {
   removeUserAccount()
   reLaunchToLogin(url || consts.LOGIN_PATH)
 }
-
-

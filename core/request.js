@@ -142,4 +142,3 @@ requestInstance.interceptors.response.use(
 )
 
 export default requestInstance
-
