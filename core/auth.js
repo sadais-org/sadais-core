@@ -26,6 +26,11 @@ export const getLoginInfo = () => {
   return loginInfo
 }
 
+export const getUserInfo = () => {
+  const userInfo = uni.getStorageSync(USER_INFO)
+  return userInfo
+}
+
 /**
  * 保存用户信息到本地存储中
  * @param {Object} user 用户信息
