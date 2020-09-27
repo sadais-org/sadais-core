@@ -6,18 +6,17 @@ let CONSTS = {
   NAME: '', // 应用名称
   SYSTEM: '', // 系统
   VERSION: '1.0', // 版本号
-  RET_CODE: { SUCCESS: 0, FAIL: 1, TOKEN_UNDEFINED: 19, TOKEN_EXPIRED: 2 }, // 返回RET状态码解析
   LOGIN_PATH: '',
-  TOKEN_EXCEPTION_PROCESS: true, // 使用通用逻辑处理TOKEN异常，需要自定义处理则设置成false
-  TOKEN_INVALID_CODE: [2, 3], // 接口返回码如果是2或3 则表明token过期或无效 需要自动刷新token
-  TOKEN_WHITE_LIST: [], // 不需要设置token的白名单
-  NEED_REFRESH_TOKEN_LIST: ['/api/user/account/v1/login/refreshtoken'], // 需要刷新token的接口名单
-  SADAIS_AGENT: false,
-  TOKEN_API: '/api/user/account/v1/login/refreshtoken',
-  TOKEN_KEY: 'jwttoken', // 设置header token key
   API_BASE_URL: '', // 接口baseURL
   STATIC_BASE_URL, // 静态资源baseURL
   STATIC_IMG_URL: STATIC_BASE_URL + '/demo/project/static/img/', // 静态资源文件路径
+  RET_CODE: { SUCCESS: 0, FAIL: 1, TOKEN_UNDEFINED: 19, TOKEN_EXPIRED: 2 }, // 返回RET状态码解析
+  SADAIS_AGENT: false,
+  TOKEN_EXCEPTION_PROCESS: true, // 使用通用逻辑处理TOKEN异常，需要自定义处理则设置成false
+  TOKEN_INVALID_CODE: [2, 3], // 接口返回码如果是2或3 则表明token过期或无效 需要自动刷新token
+  TOKEN_WHITE_LIST: [], // 不需要设置token的白名单
+  TOKEN_API: '/api/user/account/v1/login/refreshtoken',
+  TOKEN_KEY: 'jwttoken', // 设置header token key
   get(name) {
     return this[name]
   }

@@ -1,5 +1,9 @@
+import { reLaunch } from '@/piui/tools/navi'
+import { getConsts } from '../consts'
+
+const consts = getConsts()
+
 const USER_INFO = 'USER_INFO' // 用户个人信息
-const USER_ACCOUNT = 'USER_ACCOUNT' // 用户账号
 const LOGIN_INFO = 'LOGIN_INFO' // 登录信息
 const TOKEN_ID = 'TOKEN_ID' // TOKEN令牌ID
 const REFRESH_TOKEN_ID = 'REFRESH_TOKEN_ID' // 刷新token时使用的token
@@ -39,50 +43,35 @@ export const removeUserInfo = () => {
 }
 
 /**
- * 获取用户账号
- */
-export const getUserAccount = () => {
-  const userAccount = uni.getStorageSync(USER_ACCOUNT)
-  return userAccount
-}
-
-/**
- * 移除令牌ID
- */
-export const removeUserAccount = () => {
-  return uni.removeStorageSync(USER_ACCOUNT)
-}
-
-/**
  * 从本地存储中获取用户ID
  */
-export const getUserid = () => {
+export const getUserId = () => {
   const user = uni.getStorageSync(USER_INFO) || {}
   return user.userid || user.userId || ''
 }
 
 /**
  * 保存令牌ID到本地存储中
- * @param {String} tokenid 令牌
+ * @param {String} TokenId 令牌
  */
-export const saveTokenid = tokenid => {
+export const saveTokenId = TokenId => {
   uni.setStorage({
     key: TOKEN_ID,
-    data: tokenid
+    data: TokenId
   })
 }
 
 /**
  * 从本地存储中获取令牌ID
  */
-export const getTokenid = () => {
+export const getTokenId = () => {
   return uni.getStorageSync(TOKEN_ID) || ''
 }
 
 /**
  * 移除令牌ID
  */
-export const removeTokenid = () => {
+export const removeTokenId = () => {
   return uni.removeStorageSync(TOKEN_ID)
 }
 
@@ -90,21 +79,21 @@ export const removeTokenid = () => {
  * 保存刷新token的令牌ID到本地存储中
  * @param {String} refreshToken 令牌
  */
-export const saveRefreshTokenid = refreshToken => {
+export const saveRefreshTokenId = refreshToken => {
   uni.setStorageSync(REFRESH_TOKEN_ID, refreshToken)
 }
 
 /**
  * 从本地存储中获取令牌ID
  */
-export const getRefreshTokenid = () => {
+export const getRefreshTokenId = () => {
   return uni.getStorageSync(REFRESH_TOKEN_ID) || ''
 }
 
 /**
  * 移除令牌ID
  */
-export const removeRefreshTokenid = () => {
+export const removeRefreshTokenId = () => {
   return uni.removeStorageSync(REFRESH_TOKEN_ID)
 }
 
@@ -133,9 +122,8 @@ export const reLaunchToLogin = url => {
  */
 export const logout = url => {
   console.log('用户注销，清除相关用户信息')
-  removeTokenid()
-  removeRefreshTokenid()
+  removeTokenId()
+  removeRefreshTokenId()
   removeUserInfo()
-  removeUserAccount()
   reLaunchToLogin(url || consts.LOGIN_PATH)
 }

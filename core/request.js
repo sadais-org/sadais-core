@@ -1,6 +1,6 @@
 import Request from 'luch-request'
 import { getConsts } from '../consts'
-import { getUserid, saveTokenid, getTokenid, saveRefreshTokenid, getRefreshTokenid } from './auth'
+import { getUserId, saveTokenId, getTokenId, saveRefreshTokenId, getRefreshTokenId } from './auth'
 const RETRY_TOKEN_TIME = 10 // 重新获取token次数
 
 const options = {
@@ -8,7 +8,7 @@ const options = {
   header: {
     'sadais-agent': _getSadaisAgent()
   },
-  custom: {
+  extData: {
     currentTokenRetry: RETRY_TOKEN_TIME // 当前token刷新次数
   }
 }
@@ -38,48 +38,56 @@ function _getSadaisAgent() {
  * 获取token对象
  */
 function _getToken(requestUrl) {
+  let token = ''
   // 首先判断是否是刷新token的接口，如果是则取刷新token的专用refreshToken
-  if (getConsts('NEED_REFRESH_TOKEN_LIST').includes(requestUrl)) {
-    const refreshTokenid = getRefreshTokenid()
-    const token = {
-      [getConsts('TOKEN_KEY')]: refreshTokenid
-    }
-    return token
+  if (getConsts('TOKEN_API') === requestUrl) {
+    token = getRefreshTokenId()
+  } else if (!getConsts('TOKEN_WHITE_LIST').includes[requestUrl]) {
+    // 不在白名单中，直接获取tokenId
+    token = getTokenId()
   }
-  // 数据签名
-  const tokenid = getTokenid()
-  if (!getConsts('TOKEN_WHITE_LIST').includes[requestUrl] && tokenid) {
-    const token = {
-      [getConsts('TOKEN_KEY')]: tokenid
-    }
-    return token
-  }
-  return {}
+  return token
 }
 
-const refreshTokenIfNeed = async response => {
+/**
+ * 发起请求获取token
+ */
+async function apiGetToken() {
+  const { data } = await requestInstance.get(getConsts('TOKEN_API'))
+  return data
+}
+
+/**
+ * 刷新token
+ * @param {*} response 请求返回response
+ */
+async function _refreshToken(response) {
   if (
     response &&
     response.data &&
     response.data.head &&
     getConsts('TOKEN_INVALID_CODE').includes(response.data.head.ret)
   ) {
-    const userId = getUserid()
-    if (!userId || !response.config.custom.currentTokenRetry) {
+    const userId = getUserId()
+    if (!userId || !response.config.extData.currentTokenRetry) {
+      // 如果用户未登录，重定向到登录页面
       reLaunchToLogin()
       return response
     }
-    response.config.custom.currentTokenRetry--
+    response.config.extData.currentTokenRetry--
 
     const data = await apiGetToken()
-    if (data && data.head && data.head.ret === 0) {
-      response.config.custom.currentTokenRetry = RETRY_TOKEN_TIME // 重置token重试次数
-      // 刷新token成功 保存token
-      const accessToken = data.data && data.data.accesstoken
-      const refreshtoken = data.data && data.data.refreshtoken
+    if (data && data.head && data.head.ret === getConsts('RET_CODE').SUCCESS) {
+      // 刷新token成功重置token重试次数
+      response.config.extData.currentTokenRetry = RETRY_TOKEN_TIME
 
-      saveTokenid(accessToken)
-      refreshtoken && saveRefreshTokenid(refreshtoken)
+      // 保存tokenId和refreshTokenId
+      const tokenId = data.data && data.data.accesstoken
+      const refreshToken = data.data && data.data.refreshtoken
+
+      tokenid && saveTokenId(tokenId)
+      refreshtoken && saveRefreshTokenId(refreshToken)
+
       // 重新发起请求
       const newResponse = await requestInstance.request(response.config)
       return newResponse
@@ -88,25 +96,14 @@ const refreshTokenIfNeed = async response => {
   return response
 }
 
-const apiGetToken = async () => {
-  const { data } = await requestInstance.get(getConsts('TOKEN_API'))
-  return data
-}
-
+// request拦截器
 requestInstance.interceptors.request.use(
   config => {
-    /* 请求之前拦截器。可以使用async await 做异步操作 */
-    config.header = {
-      ...config.header
-    }
+    if (!config.header) config.header = {}
 
+    // 设置token
     const token = _getToken(config.url)
-    if (token) {
-      config.header = {
-        ...config.header,
-        ...token
-      }
-    }
+    if (token) config.header[getConsts('TOKEN_KEY')] = token
 
     // 如果post请求 没有设置content-type 则默认application/json
     if (!config.header['content-type'] && config.method.toUpperCase() === 'POST') {
@@ -120,23 +117,16 @@ requestInstance.interceptors.request.use(
   }
 )
 
+// response拦截器
 requestInstance.interceptors.response.use(
   async response => {
-    const statusCode = response.statusCode
-    /* 请求之后拦截器。可以使用async await 做异步操作  */
-    if (statusCode !== 200) {
-      // 服务端返回的状态码不等于200，则reject()
-      return Promise.reject(response)
-    }
-
     if (getConsts('TOKEN_EXCEPTION_PROCESS')) {
-      response = await refreshTokenIfNeed(response)
+      response = await _refreshToken(response)
     }
     return response
   },
   response => {
     // 请求异常处理
-    console.log(response)
     return Promise.reject(response)
   }
 )
