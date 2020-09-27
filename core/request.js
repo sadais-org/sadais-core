@@ -8,7 +8,7 @@ const options = {
   header: {
     'sadais-agent': _getSadaisAgent()
   },
-  extData: {
+  custom: {
     currentTokenRetry: RETRY_TOKEN_TIME // 当前token刷新次数
   }
 }
@@ -69,24 +69,24 @@ async function _refreshToken(response) {
     getConsts('TOKEN_INVALID_CODE').includes(response.data.head.ret)
   ) {
     const userId = getUserId()
-    if (!userId || !response.config.extData.currentTokenRetry) {
+    if (!userId || !response.config.custom.currentTokenRetry) {
       // 如果用户未登录，重定向到登录页面
       reLaunchToLogin()
       return response
     }
-    response.config.extData.currentTokenRetry--
+    response.config.custom.currentTokenRetry--
 
     const data = await apiGetToken()
+
     if (data && data.head && data.head.ret === getConsts('RET_CODE').SUCCESS) {
       // 刷新token成功重置token重试次数
-      response.config.extData.currentTokenRetry = RETRY_TOKEN_TIME
-
+      response.config.custom.currentTokenRetry = RETRY_TOKEN_TIME
       // 保存tokenId和refreshTokenId
       const tokenId = data.data && data.data.accesstoken
       const refreshToken = data.data && data.data.refreshtoken
 
-      tokenid && saveTokenId(tokenId)
-      refreshtoken && saveRefreshTokenId(refreshToken)
+      tokenId && saveTokenId(tokenId)
+      refreshToken && saveRefreshTokenId(refreshToken)
 
       // 重新发起请求
       const newResponse = await requestInstance.request(response.config)

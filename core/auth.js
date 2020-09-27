@@ -54,11 +54,8 @@ export const getUserId = () => {
  * 保存令牌ID到本地存储中
  * @param {String} TokenId 令牌
  */
-export const saveTokenId = TokenId => {
-  uni.setStorage({
-    key: TOKEN_ID,
-    data: TokenId
-  })
+export const saveTokenId = tokenid => {
+  uni.setStorageSync(TOKEN_ID, tokenid)
 }
 
 /**

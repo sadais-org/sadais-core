@@ -11,7 +11,7 @@ let CONSTS = {
   STATIC_BASE_URL, // 静态资源baseURL
   STATIC_IMG_URL: STATIC_BASE_URL + '/demo/project/static/img/', // 静态资源文件路径
   RET_CODE: { SUCCESS: 0, FAIL: 1, TOKEN_UNDEFINED: 19, TOKEN_EXPIRED: 2 }, // 返回RET状态码解析
-  SADAIS_AGENT: false,
+  SADAIS_AGENT: true,
   TOKEN_EXCEPTION_PROCESS: true, // 使用通用逻辑处理TOKEN异常，需要自定义处理则设置成false
   TOKEN_INVALID_CODE: [2, 3], // 接口返回码如果是2或3 则表明token过期或无效 需要自动刷新token
   TOKEN_WHITE_LIST: [], // 不需要设置token的白名单
