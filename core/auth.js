@@ -5,8 +5,30 @@ const consts = getConsts()
 
 const USER_INFO = 'USER_INFO' // 用户个人信息
 const LOGIN_INFO = 'LOGIN_INFO' // 登录信息
+const ACCOUNT_INFO = 'ACCOUNT_INFO' // 账号信息
 const TOKEN_ID = 'TOKEN_ID' // TOKEN令牌ID
 const REFRESH_TOKEN_ID = 'REFRESH_TOKEN_ID' // 刷新token时使用的token
+
+/**
+ * 保存用户信息到本地存储中
+ * @param {Array} accountInfo 用户信息
+ */
+export const saveAccountInfo = accountInfo => {
+  const result = uni.setStorageSync(ACCOUNT_INFO, accountInfo)
+  return result
+}
+
+/**
+ * 获取账号信息 return Array
+ */
+export const getAccountInfo = () => {
+  const accountInfo = uni.getStorageSync(ACCOUNT_INFO)
+  return accountInfo
+}
+
+export const removeAccountInfo = () => {
+  return uni.removeStorageSync(ACCOUNT_INFO)
+}
 
 /**
  * 保存用户信息到本地存储中
@@ -127,5 +149,6 @@ export const logout = url => {
   removeTokenId()
   removeRefreshTokenId()
   removeUserInfo()
+  removeAccountInfo()
   reLaunchToLogin(url || consts.LOGIN_PATH)
 }
