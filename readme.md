@@ -10,7 +10,7 @@ import sadaisCore from 'sadais-core'
 Vue.use(sadaisCore)
 ```
 
-1. piui
+1. sadais-piui
 
 
 ## uni.scss建议和sadais-core一直的consts配置

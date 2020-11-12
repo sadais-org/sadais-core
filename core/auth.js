@@ -1,4 +1,4 @@
-import { reLaunch } from 'piui/tools/navi'
+import { reLaunch } from 'sadais-piui/tools/navi'
 import { getConsts } from '../consts'
 
 const consts = getConsts()
