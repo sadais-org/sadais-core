@@ -6,7 +6,7 @@
 
 ```js
 // 引入核心业务
-import sadaisCore from '@/sadais-core'
+import sadaisCore from 'sadais-core'
 Vue.use(sadaisCore)
 ```
 
@@ -25,12 +25,12 @@ $STATIC_IMG_URL: $STATIC_BASE_URL + '/huafa/marketing-activities-uniapp/static/i
 ## consts的引用
 ### js里面用
 
-不要直接应用@/sadais-core/const或者@/src/consts，sadais-core会进行一次合并，正确的使用方式是
+不要直接应用sadais-core/const或者@/src/consts，sadais-core会进行一次合并，正确的使用方式是
 
 ```js
 this.$consts.API_BASE_URL
 
-import { getConsts } from '@/sadais-core/consts'
+import { getConsts } from 'sadais-core/consts'
 getConsts('API_BASE_URL')
 getConsts().API_BASE_URL
 ```
@@ -47,7 +47,7 @@ request基于luch-request二次封装
 https://www.quanzhan.co/luch-request/guide/3.x/#%E4%BB%8B%E7%BB%8D
 
 ```js
-import request from '@/sadais-core/core/request'
+import request from 'sadais-core/core/request'
 
 /**
  * 获取活动信息
