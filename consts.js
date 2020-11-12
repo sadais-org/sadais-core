@@ -1,4 +1,4 @@
-import { mergeDeep } from '@/piui/tools/lang'
+import { mergeDeep } from 'piui/tools/lang'
 
 const STATIC_BASE_URL = 'http://m.sadais.com'
 
