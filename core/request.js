@@ -1,6 +1,6 @@
 import Request from 'luch-request'
 import { getConsts } from '../consts'
-import { getUserId, saveTokenId, getTokenId, saveRefreshTokenId, getRefreshTokenId } from './auth'
+import { getUserId, saveTokenId, getTokenId, saveRefreshTokenId, getRefreshTokenId, reLaunchToLogin } from './auth'
 const RETRY_TOKEN_TIME = 10 // 重新获取token次数
 
 const options = {
@@ -21,11 +21,11 @@ function _getSadaisAgent() {
   if (getConsts('SADAIS_AGENT')) {
     const appName = getConsts('NAME')
     const appVersion = getConsts('VERSION')
-    const sysInfo = uni.getSystemInfoSync()
     const system = getConsts('SYSTEM')
-    const channel = ''
-    const devInfo = sysInfo ? '(' + sysInfo.brand + ';' + sysInfo.system + ')' : ''
+    const channel = getConsts('CHANNEL')
     const station = getConsts('STATION')
+    const sysInfo = uni.getSystemInfoSync()
+    const devInfo = sysInfo ? '(' + sysInfo.brand + ';' + sysInfo.system + ')' : ''
 
     // 应用英文名称（全大写）/当前版本/系统（全大写）/渠道信息/系统信息/网络信息/运营商，
     const sadaisAgent = [appName, appVersion, system, channel, devInfo, '', station].join('/')
