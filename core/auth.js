@@ -134,7 +134,7 @@ export const redirectToLogin = url => {
  */
 export const reLaunchToLogin = url => {
   const pages = getCurrentPages()
-  const currentPath = pages[pages.length].route
+  const currentPath = pages[pages.length - 1].route
   // 如果已在登录页就不再进入
   if (!currentPath || !currentPath.includes(consts.LOGIN_PATH)) {
     reLaunch(url || consts.LOGIN_PATH)
