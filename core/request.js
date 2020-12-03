@@ -1,15 +1,14 @@
 import Request from 'luch-request'
-import { getConsts } from '../consts'
-import { getUserId, saveTokenId, getTokenId, saveRefreshTokenId, getRefreshTokenId, reLaunchToLogin } from './auth'
+import {getConsts} from '../consts'
+import {getRefreshTokenId, getTokenId, getUserId, reLaunchToLogin, saveRefreshTokenId, saveTokenId} from './auth'
+
 const RETRY_TOKEN_TIME = 10 // 重新获取token次数
+let currentTokenRetry = RETRY_TOKEN_TIME // 当前token刷新次数
 
 const options = {
   baseURL: getConsts('API_BASE_URL'),
   header: {
     'sadais-agent': _getSadaisAgent()
-  },
-  custom: {
-    currentTokenRetry: RETRY_TOKEN_TIME // 当前token刷新次数
   }
 }
 const requestInstance = new Request(options)
@@ -28,8 +27,7 @@ function _getSadaisAgent() {
     const devInfo = sysInfo ? '(' + sysInfo.brand + ';' + sysInfo.system + ')' : ''
 
     // 应用英文名称（全大写）/当前版本/系统（全大写）/渠道信息/系统信息/网络信息/运营商，
-    const sadaisAgent = [appName, appVersion, system, channel, devInfo, '', station].join('/')
-    return sadaisAgent
+    return [appName, appVersion, system, channel, devInfo, '', station].join('/')
   }
   return ''
 }
@@ -58,6 +56,13 @@ async function apiGetToken() {
 }
 
 /**
+ * 重置token刷新次数
+ */
+function resetTokenRetry() {
+  currentTokenRetry = RETRY_TOKEN_TIME
+}
+
+/**
  * 刷新token
  * @param {*} response 请求返回response
  */
@@ -69,18 +74,20 @@ async function _refreshToken(response) {
     getConsts('TOKEN_INVALID_CODE').includes(response.data.head.ret)
   ) {
     const userId = getUserId()
-    if (!userId || !response.config.custom.currentTokenRetry) {
-      // 如果用户未登录，重定向到登录页面
+    if (!userId || currentTokenRetry <= 0) {
+      // 如果用户未登录，或者token刷新次数已用光，重定向到登录页面
+      resetTokenRetry()
       reLaunchToLogin()
       return response
     }
-    response.config.custom.currentTokenRetry--
+
+    currentTokenRetry--
 
     const data = await apiGetToken()
 
     if (data && data.head && data.head.ret === getConsts('RET_CODE').SUCCESS) {
       // 刷新token成功重置token重试次数
-      response.config.custom.currentTokenRetry = RETRY_TOKEN_TIME
+      resetTokenRetry()
       // 保存tokenId和refreshTokenId
       const tokenId = data.data && data.data.accesstoken
       const refreshToken = data.data && data.data.refreshtoken
@@ -89,8 +96,7 @@ async function _refreshToken(response) {
       refreshToken && saveRefreshTokenId(refreshToken)
 
       // 重新发起请求
-      const newResponse = await requestInstance.request(response.config)
-      return newResponse
+      return await requestInstance.request(response.config)
     }
   }
   return response
