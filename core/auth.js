@@ -133,12 +133,19 @@ export const redirectToLogin = url => {
  * 关闭所有页面打开登录页面
  */
 export const reLaunchToLogin = url => {
+  const loginPath = url || consts.LOGIN_PATH
+  if(!loginPath){
+    console.warn('没有传入或配置LOGIN_PATH，请设置')
+    return
+  }
   const pages = getCurrentPages()
   const currentPath = pages[pages.length - 1].route
   // 如果已在登录页就不再进入
-  if (!currentPath || !currentPath.includes(consts.LOGIN_PATH)) {
-    reLaunch(url || consts.LOGIN_PATH)
+  if(currentPath && currentPath.includes(loginPath)) {
+    console.warn('当前页面为登录页，暂不处理跳转登录页操作')
+    return
   }
+  reLaunch(loginPath)
 }
 
 /**
