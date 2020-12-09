@@ -33,12 +33,21 @@ function _getSadaisAgent() {
 }
 
 /**
+ * 判断url是否Token请求
+ * @param url 请求url
+ * @returns {*}
+ */
+function isTokenApi(url) {
+  return url.includes(getConsts('TOKEN_API'))
+}
+
+/**
  * 获取token对象
  */
 function _getToken(requestUrl) {
   let token = ''
   // 首先判断是否是刷新token的接口，如果是则取刷新token的专用refreshToken
-  if (getConsts('TOKEN_API') === requestUrl) {
+  if (isTokenApi(requestUrl)) {
     token = getRefreshTokenId()
   } else if (!getConsts('TOKEN_WHITE_LIST').includes[requestUrl]) {
     // 不在白名单中，直接获取tokenId
@@ -63,6 +72,17 @@ function resetTokenRetry() {
 }
 
 /**
+ * 结束刷新token
+ * @param response 请求返回response
+ * @returns response
+ */
+function _stopRefreshToken(response) {
+  resetTokenRetry()
+  reLaunchToLogin()
+  return response
+}
+
+/**
  * 刷新token
  * @param {*} response 请求返回response
  */
@@ -76,9 +96,7 @@ async function _refreshToken(response) {
     const userId = getUserId()
     if (!userId || currentTokenRetry <= 0) {
       // 如果用户未登录，或者token刷新次数已用光，重定向到登录页面
-      resetTokenRetry()
-      reLaunchToLogin()
-      return response
+      return _stopRefreshToken(response)
     }
 
     currentTokenRetry--
@@ -97,6 +115,9 @@ async function _refreshToken(response) {
 
       // 重新发起请求
       return await requestInstance.request(response.config)
+    } else {
+      // token 获取失败，重新登录
+      return _stopRefreshToken(response)
     }
   }
   return response
