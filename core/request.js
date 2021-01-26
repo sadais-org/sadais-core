@@ -13,6 +13,9 @@ const options = {
 const sadaisAgent = _getSadaisAgent()
 sadaisAgent && (options.header['sadais-agent'] = sadaisAgent)
 
+// 初始化实例
+const requestInstance = new Request(options)
+
 // request拦截器
 requestInstance.interceptors.request.use(
   config => {
@@ -48,7 +51,7 @@ requestInstance.interceptors.response.use(
   }
 )
 
-const requestInstance = new Request(options)
+
 
 /**
  * 获取sadaisAgent
