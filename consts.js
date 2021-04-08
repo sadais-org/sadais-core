@@ -14,6 +14,7 @@ let CONSTS = {
   // 运行平台枚举（H5：网页，APP：客户端应用，MP: 小程序）
   PLATFORM: { H5: 'H5', APP: 'APP', MP: 'MP' },
   SADAIS_AGENT: true,
+  AGENT_KEY: 'sadais-agent',
   TOKEN_EXCEPTION_PROCESS: true, // 使用通用逻辑处理TOKEN异常，需要自定义处理则设置成false
   // 服务器返回TOKEN失效集合
   // 2：token无效

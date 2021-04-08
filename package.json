@@ -1,6 +1,6 @@
 {
   "name": "sadais-core",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "sadais核心库",
   "main": "index.js",
   "scripts": {

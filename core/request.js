@@ -11,7 +11,8 @@ const options = {
 }
 // 设置sadaisAgent
 const sadaisAgent = _getSadaisAgent()
-sadaisAgent && (options.header['sadais-agent'] = sadaisAgent)
+const agentKey = getConsts('AGENT_KEY')
+sadaisAgent && (options.header[agentKey] = sadaisAgent)
 
 // 初始化实例
 const requestInstance = new Request(options)
