@@ -7,6 +7,8 @@ let currentTokenRetry = RETRY_TOKEN_TIME // 当前token刷新次数
 
 const options = {
   baseURL: getConsts('API_BASE_URL'),
+  // 跨域请求时是否携带凭证
+  withCredentials:  getConsts('WITHCREDENTIALS'),
   header: {}
 }
 // 设置sadaisAgent

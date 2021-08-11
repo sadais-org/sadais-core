@@ -15,6 +15,7 @@ let CONSTS = {
   PLATFORM: { H5: 'H5', APP: 'APP', MP: 'MP' },
   SADAIS_AGENT: true,
   AGENT_KEY: 'sadais-agent',
+  WITHCREDENTIALS: true, // 跨域请求时是否携带凭证
   TOKEN_EXCEPTION_PROCESS: true, // 使用通用逻辑处理TOKEN异常，需要自定义处理则设置成false
   // 服务器返回TOKEN失效集合
   // 2：token无效

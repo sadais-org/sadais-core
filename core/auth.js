@@ -1,4 +1,4 @@
-import { reLaunch } from 'sadais-piui/tools/navi'
+import navi from 'sadais-piui/tools/navi'
 import { getConsts } from '../consts'
 
 const consts = getConsts()
@@ -145,7 +145,7 @@ export const reLaunchToLogin = url => {
     console.warn('当前页面为登录页，暂不处理跳转登录页操作')
     return
   }
-  reLaunch(loginPath)
+  navi.reLaunch(loginPath)
 }
 
 /**
