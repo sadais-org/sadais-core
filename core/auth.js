@@ -1,4 +1,4 @@
-import navi from 'sadais-piui/tools/navi'
+import navi from '@sadais/piui-tool/tools/navi'
 import { getConsts } from '../consts'
 
 const consts = getConsts()

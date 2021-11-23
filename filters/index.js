@@ -1,4 +1,4 @@
-import { dynamicImport } from 'sadais-piui/tools/common'
+import { dynamicImport } from '@sadais/piui-tool/tools/common'
 
 /**
  * 默认导出导入本目录下，排除index.js的所有js
